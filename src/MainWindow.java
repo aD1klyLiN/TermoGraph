@@ -5,7 +5,10 @@ import java.awt.event.ActionListener;
 
 public class MainWindow extends JFrame {
 
-    private JFileChooser fc = new JFileChooser();
+    private int width = 640;
+    private int height = 480;
+    private JFileChooser fileChooser = new JFileChooser();
+    private String filePath;
 
     public MainWindow() throws HeadlessException {
         super("Main Window");
@@ -14,17 +17,20 @@ public class MainWindow extends JFrame {
         JButton open = new JButton("Открыть...");
         open.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                fc.setDialogTitle("Выберите каталог");
+                fileChooser.setDialogTitle("Выберите каталог");
                 // настроим для выбора каталога
-                fc.setFileSelectionMode(
+                fileChooser.setFileSelectionMode(
                         JFileChooser.FILES_AND_DIRECTORIES);
-                int res = fc.showOpenDialog(
+                int res = fileChooser.showOpenDialog(
                         MainWindow.this);
                 // если файл выбран, покажем его
-                if ( res == JFileChooser.APPROVE_OPTION )
+                if ( res == JFileChooser.APPROVE_OPTION ) {
                     JOptionPane.showMessageDialog(
                             MainWindow.this,
-                            fc.getSelectedFile());
+                            fileChooser.getSelectedFile());
+                    filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                    System.out.println(filePath);
+                }
             }
         });
 
@@ -32,7 +38,9 @@ public class MainWindow extends JFrame {
         add(open);
         //add(save);
 
-        setSize(400, 300);
+        Rectangle bounds = getGraphicsConfiguration().getBounds();
+        setLocation(bounds.width/2 - width/2, bounds.height/2 - height/2);
+        setSize(width, height);
         setVisible(true);
     }
 
